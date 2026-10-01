@@ -1,0 +1,22 @@
+{
+  "name": "ComparaPrecios - Calculadora de Ahorro",
+  "short_name": "ComparaPrecios",
+  "description": "Compara precios por unidad de medida y ahorra en tus compras",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#16a34a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
