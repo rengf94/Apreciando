@@ -1,36 +1,22 @@
-import { Unit } from '../lib/calculations'
-
 interface ProductCardProps {
   label: string
   price: string
   quantity: string
   measurePerItem: string
-  unit: Unit
   onPriceChange: (value: string) => void
   onQuantityChange: (value: string) => void
   onMeasurePerItemChange: (value: string) => void
-  onUnitChange: (value: Unit) => void
   error?: string | null
 }
-
-const UNITS: { value: Unit; label: string }[] = [
-  { value: 'metros', label: 'Metros (m)' },
-  { value: 'litros', label: 'Litros (L)' },
-  { value: 'kilos', label: 'Kilos (kg)' },
-  { value: 'gramos', label: 'Gramos (g)' },
-  { value: 'unidades', label: 'Unidades (pzs)' },
-]
 
 export default function ProductCard({
   label,
   price,
   quantity,
   measurePerItem,
-  unit,
   onPriceChange,
   onQuantityChange,
   onMeasurePerItemChange,
-  onUnitChange,
   error,
 }: ProductCardProps) {
   return (
@@ -89,23 +75,6 @@ export default function ProductCard({
             placeholder="Ej. 50"
             className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-savings-500 focus:border-transparent transition-all text-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
           />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
-            Unidad de medida
-          </label>
-          <select
-            value={unit}
-            onChange={(e) => onUnitChange(e.target.value as Unit)}
-            className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-savings-500 focus:border-transparent transition-all text-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
-          >
-            {UNITS.map((u) => (
-              <option key={u.value} value={u.value}>
-                {u.label}
-              </option>
-            ))}
-          </select>
         </div>
       </div>
 

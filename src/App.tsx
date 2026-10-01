@@ -3,6 +3,7 @@ import ProductCard from './components/ProductCard'
 import ComparisonResult from './components/ComparisonResult'
 import AdBanner from './components/AdBanner'
 import History from './components/History'
+import InstallPromptModal from './components/InstallPromptModal'
 import { useHistory, HistoryEntry } from './hooks/useHistory'
 import { useDarkMode } from './hooks/useDarkMode'
 import { useInstallPrompt } from './hooks/useInstallPrompt'
@@ -13,108 +14,112 @@ import {
   compareProducts,
 } from './lib/calculations'
 
-function App() {
-  // Producto A
-  const [priceA, setPriceA] = useState('')
-  const [quantityA, setQuantityA] = useState('')
-  const [measureA, setMeasureA] = useState('')
-  const [unitA, setUnitA] = useState<Unit>('metros')
+interface ProductForm {
+  price: string
+  quantity: string
+  measurePerItem: string
+}
 
-  // Producto B
-  const [priceB, setPriceB] = useState('')
-  const [quantityB, setQuantityB] = useState('')
-  const [measureB, setMeasureB] = useState('')
-  const [unitB, setUnitB] = useState<Unit>('metros')
+const UNITS: { value: Unit; label: string }[] = [
+  { value: 'metros', label: 'Metros (m)' },
+  { value: 'litros', label: 'Litros (L)' },
+  { value: 'kilos', label: 'Kilos (kg)' },
+  { value: 'gramos', label: 'Gramos (g)' },
+  { value: 'unidades', label: 'Unidades (pzs)' },
+]
+
+function App() {
+  // Unidad global compartida
+  const [unit, setUnit] = useState<Unit>('metros')
+
+  // Productos (2 o 3)
+  const [products, setProducts] = useState<ProductForm[]>([
+    { price: '', quantity: '', measurePerItem: '' },
+    { price: '', quantity: '', measurePerItem: '' },
+  ])
 
   const [result, setResult] = useState<ComparisonResultType | null>(null)
-  const [errorA, setErrorA] = useState<string | null>(null)
-  const [errorB, setErrorB] = useState<string | null>(null)
+  const [errors, setErrors] = useState<(string | null)[]>([null, null])
+  const [showInstallModal, setShowInstallModal] = useState(false)
 
   const { history, addEntry, clearHistory, removeEntry } = useHistory()
   const { isDark, toggle: toggleDark } = useDarkMode()
   const { isInstallable, isInstalled, installApp } = useInstallPrompt()
 
+  const updateProduct = (index: number, field: keyof ProductForm, value: string) => {
+    setProducts((prev) => {
+      const next = [...prev]
+      next[index] = { ...next[index], [field]: value }
+      return next
+    })
+  }
+
+  const addThirdProduct = () => {
+    if (products.length < 3) {
+      setProducts((prev) => [...prev, { price: '', quantity: '', measurePerItem: '' }])
+      setErrors((prev) => [...prev, null])
+    }
+  }
+
   const handleCompare = () => {
-    setErrorA(null)
-    setErrorB(null)
+    setErrors(products.map(() => null))
     setResult(null)
 
-    const pA = parseFloat(priceA)
-    const qA = parseFloat(quantityA)
-    const mA = parseFloat(measureA)
-
-    const pB = parseFloat(priceB)
-    const qB = parseFloat(quantityB)
-    const mB = parseFloat(measureB)
+    const parsed = products.map((p) => ({
+      price: parseFloat(p.price),
+      quantity: parseFloat(p.quantity),
+      measurePerItem: parseFloat(p.measurePerItem),
+    }))
 
     let hasError = false
+    const newErrors = parsed.map((p) => {
+      if (isNaN(p.price) || p.price <= 0) {
+        hasError = true
+        return 'Ingresa un precio válido'
+      }
+      if (isNaN(p.quantity) || p.quantity <= 0) {
+        hasError = true
+        return 'Ingresa una cantidad válida'
+      }
+      if (isNaN(p.measurePerItem) || p.measurePerItem <= 0) {
+        hasError = true
+        return 'Ingresa una medida válida'
+      }
+      return null
+    })
 
-    if (isNaN(pA) || pA <= 0) {
-      setErrorA('Ingresa un precio válido')
-      hasError = true
-    }
-    if (isNaN(qA) || qA <= 0) {
-      setErrorA('Ingresa una cantidad válida')
-      hasError = true
-    }
-    if (isNaN(mA) || mA <= 0) {
-      setErrorA('Ingresa una medida válida')
-      hasError = true
-    }
-
-    if (isNaN(pB) || pB <= 0) {
-      setErrorB('Ingresa un precio válido')
-      hasError = true
-    }
-    if (isNaN(qB) || qB <= 0) {
-      setErrorB('Ingresa una cantidad válida')
-      hasError = true
-    }
-    if (isNaN(mB) || mB <= 0) {
-      setErrorB('Ingresa una medida válida')
-      hasError = true
-    }
-
+    setErrors(newErrors)
     if (hasError) return
 
-    const productA: ProductInput = {
-      price: pA,
-      quantity: qA,
-      measurePerItem: mA,
-      unit: unitA,
-    }
-
-    const productB: ProductInput = {
-      price: pB,
-      quantity: qB,
-      measurePerItem: mB,
-      unit: unitB,
-    }
+    const productInputs: ProductInput[] = parsed.map((p) => ({
+      price: p.price,
+      quantity: p.quantity,
+      measurePerItem: p.measurePerItem,
+      unit,
+    }))
 
     try {
-      const comparison = compareProducts(productA, productB)
+      const comparison = compareProducts(productInputs)
       setResult(comparison)
       addEntry(comparison)
     } catch (err) {
       if (err instanceof Error) {
-        setErrorA(err.message)
+        setErrors((prev) => [err.message, ...prev.slice(1)])
       }
     }
   }
 
   const handleReuse = (entry: HistoryEntry) => {
-    const { productA, productB } = entry.result
-    setPriceA(productA.input.price.toString())
-    setQuantityA(productA.input.quantity.toString())
-    setMeasureA(productA.input.measurePerItem.toString())
-    setUnitA(productA.input.unit)
-    setPriceB(productB.input.price.toString())
-    setQuantityB(productB.input.quantity.toString())
-    setMeasureB(productB.input.measurePerItem.toString())
-    setUnitB(productB.input.unit)
+    const { products: entryProducts } = entry.result
+    const reused: ProductForm[] = entryProducts.map((p) => ({
+      price: p.input.price.toString(),
+      quantity: p.input.quantity.toString(),
+      measurePerItem: p.input.measurePerItem.toString(),
+    }))
+    setProducts(reused)
+    setUnit(entryProducts[0].input.unit)
     setResult(null)
-    setErrorA(null)
-    setErrorB(null)
+    setErrors(reused.map(() => null))
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -125,14 +130,24 @@ function App() {
         <div className="max-w-lg mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
-              <span className="text-2xl">⚖️</span>
-              ComparaPrecios
+              <span className="text-2xl">🔍</span>
+              Apreciando
             </h1>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
               Descubre qué producto es realmente más barato
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowInstallModal(true)}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Cómo instalar la app"
+              title="Cómo instalar"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 dark:text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
             {isInstallable && !isInstalled && (
               <button
                 onClick={installApp}
@@ -161,32 +176,49 @@ function App() {
       </header>
 
       {/* Contenido principal */}
-      <main className="max-w-lg mx-auto px-4 py-6 space-y-5 pb-24">
-        <ProductCard
-          label="Producto A"
-          price={priceA}
-          quantity={quantityA}
-          measurePerItem={measureA}
-          unit={unitA}
-          onPriceChange={setPriceA}
-          onQuantityChange={setQuantityA}
-          onMeasurePerItemChange={setMeasureA}
-          onUnitChange={setUnitA}
-          error={errorA}
-        />
+      <main className="max-w-lg mx-auto px-4 py-6 space-y-5 pb-28">
+        {/* Selector global de unidad */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
+          <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+            Unidad de medida para todos los productos
+          </label>
+          <select
+            value={unit}
+            onChange={(e) => setUnit(e.target.value as Unit)}
+            className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-savings-500 focus:border-transparent transition-all text-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
+          >
+            {UNITS.map((u) => (
+              <option key={u.value} value={u.value}>
+                {u.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        <ProductCard
-          label="Producto B"
-          price={priceB}
-          quantity={quantityB}
-          measurePerItem={measureB}
-          unit={unitB}
-          onPriceChange={setPriceB}
-          onQuantityChange={setQuantityB}
-          onMeasurePerItemChange={setMeasureB}
-          onUnitChange={setUnitB}
-          error={errorB}
-        />
+        {/* Tarjetas de productos */}
+        {products.map((product, index) => (
+          <ProductCard
+            key={index}
+            label={`Producto ${String.fromCharCode(65 + index)}`}
+            price={product.price}
+            quantity={product.quantity}
+            measurePerItem={product.measurePerItem}
+            onPriceChange={(v) => updateProduct(index, 'price', v)}
+            onQuantityChange={(v) => updateProduct(index, 'quantity', v)}
+            onMeasurePerItemChange={(v) => updateProduct(index, 'measurePerItem', v)}
+            error={errors[index]}
+          />
+        ))}
+
+        {/* Botón agregar tercer producto */}
+        {products.length < 3 && (
+          <button
+            onClick={addThirdProduct}
+            className="w-full border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 font-medium py-3 px-6 rounded-2xl hover:border-savings-500 hover:text-savings-600 dark:hover:border-savings-400 dark:hover:text-savings-400 transition-colors"
+          >
+            + Agregar tercer producto
+          </button>
+        )}
 
         {/* Botón comparar */}
         <button
@@ -211,14 +243,25 @@ function App() {
           onRemove={removeEntry}
           onReuse={handleReuse}
         />
+
+        {/* Footer */}
+        <div className="text-center text-xs text-gray-400 dark:text-gray-500 pt-4">
+          Creado por Abacus usando OpenCode
+        </div>
       </main>
 
       {/* Banner inferior fijo */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 p-3">
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 p-2">
         <div className="max-w-lg mx-auto">
           <AdBanner position="bottom" />
         </div>
       </div>
+
+      {/* Modal de instalación */}
+      <InstallPromptModal
+        isOpen={showInstallModal}
+        onClose={() => setShowInstallModal(false)}
+      />
     </div>
   )
 }

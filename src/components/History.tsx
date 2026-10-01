@@ -52,11 +52,16 @@ function HistoryItem({
     minute: '2-digit',
   })
 
+  const winnerLabel =
+    result.winnerIndex !== null
+      ? `🏆 Gana Producto ${String.fromCharCode(65 + result.winnerIndex)}`
+      : '🤝 Empate'
+
   return (
     <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-xl px-3 py-2">
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">
-          {result.winner === 'tie' ? '🤝 Empate' : `🏆 Gana Producto ${result.winner}`}
+          {winnerLabel}
         </p>
         <p className="text-xs text-gray-400 dark:text-gray-500">
           {dateStr} · Ahorro: {formatCurrency(result.savingsAmount)}

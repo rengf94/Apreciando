@@ -5,21 +5,21 @@ interface ComparisonResultProps {
 }
 
 export default function ComparisonResult({ result }: ComparisonResultProps) {
-  const { productA, productB, winner, savingsPercentage, savingsAmount } = result
+  const { products, winnerIndex, savingsPercentage, savingsAmount } = result
 
   return (
     <div className="space-y-4 animate-fade-in">
       {/* Banner de ahorro */}
-      {winner !== 'tie' && (
+      {winnerIndex !== null && (
         <div className="bg-gradient-to-r from-savings-500 to-savings-600 rounded-2xl p-5 text-white shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-3xl">🏆</span>
             <div>
               <p className="font-bold text-lg">
-                ¡El Producto {winner} es más barato!
+                ¡El Producto {String.fromCharCode(65 + winnerIndex)} es más barato!
               </p>
               <p className="text-savings-100 text-sm">
-                Ahorras {formatCurrency(savingsAmount)} por {productA.input.unit.slice(0, -1)}
+                Ahorras {formatCurrency(savingsAmount)} por {products[0].input.unit.slice(0, -1)}
               </p>
             </div>
           </div>
@@ -30,29 +30,25 @@ export default function ComparisonResult({ result }: ComparisonResultProps) {
         </div>
       )}
 
-      {winner === 'tie' && (
+      {winnerIndex === null && (
         <div className="bg-gray-100 dark:bg-gray-700 rounded-2xl p-5 text-center">
           <span className="text-3xl">🤝</span>
-          <p className="font-bold text-gray-700 dark:text-gray-200 mt-2">Ambos productos tienen el mismo precio por unidad</p>
+          <p className="font-bold text-gray-700 dark:text-gray-200 mt-2">Todos los productos tienen el mismo precio por unidad</p>
         </div>
       )}
 
       {/* Tarjetas de resultados */}
-      <div className="grid grid-cols-2 gap-3">
-        <ResultCard
-          label="Producto A"
-          pricePerUnit={productA.pricePerUnit}
-          totalMeasure={productA.totalMeasure}
-          unit={productA.input.unit}
-          isWinner={winner === 'A'}
-        />
-        <ResultCard
-          label="Producto B"
-          pricePerUnit={productB.pricePerUnit}
-          totalMeasure={productB.totalMeasure}
-          unit={productB.input.unit}
-          isWinner={winner === 'B'}
-        />
+      <div className={`grid gap-3 ${products.length === 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+        {products.map((product, index) => (
+          <ResultCard
+            key={index}
+            label={`Producto ${String.fromCharCode(65 + index)}`}
+            pricePerUnit={product.pricePerUnit}
+            totalMeasure={product.totalMeasure}
+            unit={product.input.unit}
+            isWinner={winnerIndex === index}
+          />
+        ))}
       </div>
     </div>
   )

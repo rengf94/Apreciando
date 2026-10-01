@@ -7,7 +7,7 @@ export interface HistoryEntry {
   result: ComparisonResult
 }
 
-const STORAGE_KEY = 'compareprecios_history'
+const STORAGE_KEY = 'apreciando_history'
 const MAX_ENTRIES = 20
 
 function loadHistory(): HistoryEntry[] {

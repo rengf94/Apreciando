@@ -1,6 +1,6 @@
 {
-  "name": "ComparaPrecios - Calculadora de Ahorro",
-  "short_name": "ComparaPrecios",
+  "name": "Apreciando - Calculadora de Ahorro",
+  "short_name": "Apreciando",
   "description": "Compara precios por unidad de medida y ahorra en tus compras",
   "start_url": "/",
   "display": "standalone",
@@ -9,14 +9,9 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ]
 }
