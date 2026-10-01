@@ -10,6 +10,9 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
+"overrides": {
+  "baseline-browser-mapping": "^2.7.0"
+},
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
