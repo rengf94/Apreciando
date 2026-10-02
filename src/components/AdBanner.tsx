@@ -4,32 +4,43 @@ interface AdBannerProps {
   position: 'bottom' | 'middle'
 }
 
-// Tag de Monetag - Vignette Banner
-const MONETAG_ZONE = '11943454'
-const MONETAG_SRC = 'https://n6wxm.com/vignette.min.js'
+const ADSENSE_CLIENT = 'ca-pub-3801301989672398'
+const AD_SLOTS = {
+  bottom: '3370866344',
+  middle: '9134503925',
+}
 
 export default function AdBanner({ position }: AdBannerProps) {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const adRef = useRef<HTMLModElement>(null)
+  const slotId = AD_SLOTS[position]
 
   useEffect(() => {
-    if (!containerRef.current) return
-
-    // Limpiar scripts anteriores
-    containerRef.current.innerHTML = ''
-
-    // Crear y ejecutar el script de Monetag
-    const script = document.createElement('script')
-    script.textContent = `(function(s){s.dataset.zone='${MONETAG_ZONE}',s.src='${MONETAG_SRC}'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
-    containerRef.current.appendChild(script)
-  }, [position])
+    try {
+      if (adRef.current) {
+        ;(window as any).adsbygoogle = (window as any).adsbygoogle || []
+        ;(window as any).adsbygoogle.push({})
+      }
+    } catch (err) {
+      // AdSense no cargado todavía
+    }
+  }, [slotId])
 
   return (
     <div
-      ref={containerRef}
       className={`w-full bg-gray-100 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl flex items-center justify-center overflow-hidden ${
         position === 'bottom' ? 'min-h-[50px]' : 'min-h-[90px]'
       }`}
       data-ad-slot={position}
-    />
+    >
+      <ins
+        ref={adRef}
+        className="adsbygoogle"
+        style={{ display: 'block' }}
+        data-ad-client={ADSENSE_CLIENT}
+        data-ad-slot={slotId}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    </div>
   )
 }

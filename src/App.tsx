@@ -245,8 +245,18 @@ function App() {
         />
 
         {/* Footer */}
-        <div className="text-center text-xs text-gray-400 dark:text-gray-500 pt-4">
-          Creado por Abacus usando OpenCode
+        <div className="text-center text-xs text-gray-400 dark:text-gray-500 pt-4 space-y-1">
+          <p>
+            Creado por Abacus usando OpenCode
+          </p>
+          <a
+            href="/privacy.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-savings-600 hover:underline dark:text-savings-400"
+          >
+            Política de Privacidad
+          </a>
         </div>
       </main>
 
