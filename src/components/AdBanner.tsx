@@ -4,9 +4,9 @@ interface AdBannerProps {
   position: 'bottom' | 'middle'
 }
 
-// Tag de Monetag - In-Page Push
-const MONETAG_ZONE = '11943416'
-const MONETAG_SRC = 'https://nap5k.com/tag.min.js'
+// Tag de Monetag - Vignette Banner
+const MONETAG_ZONE = '11943454'
+const MONETAG_SRC = 'https://n6wxm.com/vignette.min.js'
 
 export default function AdBanner({ position }: AdBannerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
