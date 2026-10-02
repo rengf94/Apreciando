@@ -231,7 +231,8 @@ function App() {
         {/* Resultados */}
         {result && (
           <>
-            <AdBanner position="middle" />
+            {/* AdSense banner - descomentar cuando se use AdSense */}
+            {/* <AdBanner position="middle" /> */}
             <ComparisonResult result={result} />
           </>
         )}
@@ -250,12 +251,12 @@ function App() {
         </div>
       </main>
 
-      {/* Banner inferior fijo */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 p-2">
+      {/* Banner inferior fijo - descomentar cuando se use AdSense */}
+      {/* <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 p-2">
         <div className="max-w-lg mx-auto">
           <AdBanner position="bottom" />
         </div>
-      </div>
+      </div> */}
 
       {/* Modal de instalación */}
       <InstallPromptModal
