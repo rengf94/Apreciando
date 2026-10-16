@@ -195,20 +195,36 @@ function App() {
           </select>
         </div>
 
-        {/* Tarjetas de productos */}
-        {products.map((product, index) => (
+        {/* Tarjetas de productos: A y B lado a lado, C debajo */}
+        <div className="grid grid-cols-2 gap-3">
+          {products.slice(0, 2).map((product, index) => (
+            <ProductCard
+              key={index}
+              label={`Producto ${String.fromCharCode(65 + index)}`}
+              price={product.price}
+              quantity={product.quantity}
+              measurePerItem={product.measurePerItem}
+              onPriceChange={(v) => updateProduct(index, 'price', v)}
+              onQuantityChange={(v) => updateProduct(index, 'quantity', v)}
+              onMeasurePerItemChange={(v) => updateProduct(index, 'measurePerItem', v)}
+              error={errors[index]}
+            />
+          ))}
+        </div>
+
+        {/* Tercer producto (si existe) */}
+        {products.length === 3 && (
           <ProductCard
-            key={index}
-            label={`Producto ${String.fromCharCode(65 + index)}`}
-            price={product.price}
-            quantity={product.quantity}
-            measurePerItem={product.measurePerItem}
-            onPriceChange={(v) => updateProduct(index, 'price', v)}
-            onQuantityChange={(v) => updateProduct(index, 'quantity', v)}
-            onMeasurePerItemChange={(v) => updateProduct(index, 'measurePerItem', v)}
-            error={errors[index]}
+            label={`Producto C`}
+            price={products[2].price}
+            quantity={products[2].quantity}
+            measurePerItem={products[2].measurePerItem}
+            onPriceChange={(v) => updateProduct(2, 'price', v)}
+            onQuantityChange={(v) => updateProduct(2, 'quantity', v)}
+            onMeasurePerItemChange={(v) => updateProduct(2, 'measurePerItem', v)}
+            error={errors[2]}
           />
-        ))}
+        )}
 
         {/* Botón agregar tercer producto */}
         {products.length < 3 && (
@@ -245,18 +261,16 @@ function App() {
         />
 
         {/* Footer */}
-        <div className="text-center text-xs text-gray-400 dark:text-gray-500 pt-4 space-y-1">
+        <div className="text-center text-xs text-gray-400 dark:text-gray-500 pt-4 space-y-2">
+          <div className="flex flex-wrap justify-center gap-x-3 gap-y-1">
+            <a href="/about.html" className="text-savings-600 hover:underline dark:text-savings-400">Acerca de</a>
+            <a href="/how-it-works.html" className="text-savings-600 hover:underline dark:text-savings-400">Cómo funciona</a>
+            <a href="/contact.html" className="text-savings-600 hover:underline dark:text-savings-400">Contacto</a>
+            <a href="/privacy.html" className="text-savings-600 hover:underline dark:text-savings-400">Privacidad</a>
+          </div>
           <p>
             Creado por Abacus usando OpenCode
           </p>
-          <a
-            href="/privacy.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-savings-600 hover:underline dark:text-savings-400"
-          >
-            Política de Privacidad
-          </a>
         </div>
       </main>
 
