@@ -265,6 +265,7 @@ function App() {
           <div className="flex flex-wrap justify-center gap-x-3 gap-y-1">
             <a href="/about.html" className="text-savings-600 hover:underline dark:text-savings-400">Acerca de</a>
             <a href="/how-it-works.html" className="text-savings-600 hover:underline dark:text-savings-400">Cómo funciona</a>
+            <a href="/examples.html" className="text-savings-600 hover:underline dark:text-savings-400">Ejemplos</a>
             <a href="/contact.html" className="text-savings-600 hover:underline dark:text-savings-400">Contacto</a>
             <a href="/privacy.html" className="text-savings-600 hover:underline dark:text-savings-400">Privacidad</a>
           </div>
