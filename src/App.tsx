@@ -260,6 +260,28 @@ function App() {
           onReuse={handleReuse}
         />
 
+        {/* Contenido informativo para el usuario y para indexación */}
+        <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
+          <h2 className="text-base font-bold text-gray-800 dark:text-gray-100 mb-2">
+            ¿Por qué comparar por unidad de medida?
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            El precio final de un paquete no siempre refleja lo que realmente pagas.
+            Comparando el costo por metro, litro, kilo o unidad, descubres cuál
+            es la opción más económica de forma objetiva. Por ejemplo, un paquete
+            de papel higiénico de $100 con 4 rollos de 50 metros cuesta $0.50 por
+            metro, mientras que uno de $70 con 4 rollos de 30 metros cuesta $0.58
+            por metro. Con Apreciando descubres esto en segundos.
+          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
+            Para usarla, elige una unidad de medida, ingresa el precio total,
+            la cantidad de ítems y la medida de cada ítem de ambos productos,
+            luego presiona "Comparar precios". La aplicación calcula
+            automáticamente el precio por unidad y te muestra el porcentaje
+            de ahorro de la mejor opción.
+          </p>
+        </section>
+
         {/* Footer */}
         <div className="text-center text-xs text-gray-400 dark:text-gray-500 pt-4 space-y-2">
           <div className="flex flex-wrap justify-center gap-x-3 gap-y-1">
