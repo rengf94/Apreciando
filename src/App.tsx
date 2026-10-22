@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import ProductCard from './components/ProductCard'
 import ComparisonResult from './components/ComparisonResult'
-import AdBanner from './components/AdBanner'
 import History from './components/History'
 import InstallPromptModal from './components/InstallPromptModal'
 import { useHistory, HistoryEntry } from './hooks/useHistory'
@@ -176,7 +175,7 @@ function App() {
       </header>
 
       {/* Contenido principal */}
-      <main className="max-w-lg mx-auto px-4 py-6 space-y-5 pb-28">
+      <main className="max-w-lg mx-auto px-4 py-6 space-y-5 pb-8">
         {/* Selector global de unidad */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
           <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
@@ -245,12 +244,7 @@ function App() {
         </button>
 
         {/* Resultados */}
-        {result && (
-          <>
-            <AdBanner position="middle" />
-            <ComparisonResult result={result} />
-          </>
-        )}
+        {result && <ComparisonResult result={result} />}
 
         {/* Historial */}
         <History
@@ -296,13 +290,6 @@ function App() {
           </p>
         </div>
       </main>
-
-      {/* Banner inferior fijo */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 p-2">
-        <div className="max-w-lg mx-auto">
-          <AdBanner position="bottom" />
-        </div>
-      </div>
 
       {/* Modal de instalación */}
       <InstallPromptModal

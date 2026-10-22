@@ -2,24 +2,259 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-	<!-- Multitag desactivado - causa redirecciones no deseadas -->
-	<!-- <script src="https://quge5.com/88/tag.min.js" data-zone="289866" async data-cfasync="false"></script> -->
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#16a34a" />
-    <meta name="description" content="Compara precios por unidad de medida y ahorra en tus compras" />
+    <meta name="description" content="Apreciando compara precios por unidad de medida (metro, litro, kilo, unidad) y te dice qué producto es realmente más barato. Compara hasta 3 productos y ahorra en cada compra." />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/icon.svg" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <title>Apreciando - Ahorra en tus compras</title>
+    <title>Apreciando - Compara precios por unidad de medida y ahorra</title>
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Apreciando - Compara precios por unidad de medida" />
+    <meta property="og:description" content="Descubre qué producto es realmente más barato comparando el precio por metro, litro, kilo o unidad." />
+    <meta property="og:url" content="https://apreciando.vercel.app/" />
+    <meta property="og:image" content="https://apreciando.vercel.app/icon.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Apreciando - Compara precios por unidad de medida" />
+    <meta name="twitter:description" content="Descubre qué producto es realmente más barato comparando el precio por metro, litro, kilo o unidad." />
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3801301989672398" crossorigin="anonymous"></script>
-    <!-- PropellerAds - descomentar si se quiere usar -->
-    <!-- <script src="https://quge5.com/88/tag.min.js" data-zone="289866" async data-cfasync="false"></script> -->
+
+    <style>
+      /* Estilos del contenido editorial estático (independientes de Tailwind para garantizar
+         render en el HTML inicial, que es lo que indexa Googlebot) */
+      .sc-hero { max-width: 32rem; margin: 0 auto; padding: 1.5rem 1rem 0.25rem; color: #374151; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+      .sc-hero h1 { color: #111827; font-size: 1.5rem; font-weight: 800; line-height: 1.25; margin: 0 0 .5rem; }
+      .sc-hero p { font-size: .9375rem; line-height: 1.7; margin: 0 0 .75rem; }
+      .sc-wrap { max-width: 32rem; margin: 0 auto; padding: 0 1rem 3rem; color: #374151; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+      .sc-wrap h2 { color: #111827; font-size: 1.25rem; font-weight: 700; margin: 2.5rem 0 .75rem; }
+      .sc-wrap h3 { color: #111827; font-size: 1rem; font-weight: 700; margin: 1.5rem 0 .5rem; }
+      .sc-wrap p { font-size: .9375rem; line-height: 1.7; margin: .75rem 0; }
+      .sc-wrap ul, .sc-wrap ol { font-size: .9375rem; line-height: 1.7; margin: .75rem 0; padding-left: 1.25rem; }
+      .sc-wrap li { margin: .4rem 0; }
+      .sc-wrap a { color: #16a34a; }
+      .sc-wrap table { width: 100%; border-collapse: collapse; font-size: .8125rem; margin: 1rem 0; }
+      .sc-wrap th, .sc-wrap td { border: 1px solid #e5e7eb; padding: .5rem .625rem; text-align: left; }
+      .sc-wrap th { background: #f3f4f6; font-weight: 600; }
+      .sc-wrap .sc-win { color: #15803d; font-weight: 700; }
+      .sc-wrap .sc-ad { margin: 2rem 0; min-height: 90px; }
+      .sc-wrap .sc-box { background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+      .sc-wrap .sc-box p { margin: .35rem 0; }
+      .sc-wrap .sc-links { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; margin-top: 1.5rem; font-size: .875rem; }
+      .sc-wrap hr { border: 0; border-top: 1px solid #e5e7eb; margin: 2.5rem 0 0; }
+      .dark .sc-hero, .dark .sc-wrap { color: #d1d5db; }
+      .dark .sc-hero h1, .dark .sc-wrap h2, .dark .sc-wrap h3 { color: #f9fafb; }
+      .dark .sc-hero a, .dark .sc-wrap a { color: #4ade80; }
+      .dark .sc-wrap th { background: #374151; color: #f9fafb; }
+      .dark .sc-wrap th, .dark .sc-wrap td { border-color: #4b5563; }
+      .dark .sc-wrap .sc-win { color: #4ade80; }
+      .dark .sc-wrap .sc-box { background: #052e16; }
+      .dark .sc-wrap hr { border-color: #374151; }
+    </style>
   </head>
   <body>
+    <!-- ============ CONTENIDO EDITORIAL (HTML inicial, indexable sin JS) ============ -->
+    <section class="sc-hero">
+      <h1>Apreciando: compara precios por unidad de medida y ahorra en cada compra</h1>
+      <p>
+        ¿Estás pagando de más por un paquete más grande? <strong>Apreciando</strong> compara
+        dos o tres productos por su <strong>precio real por metro, litro, kilo o unidad</strong>
+        y te dice con números cuál te conviene. Sin trucos de marketing, sin ilusiones
+        de supermercado: solo el cálculo objetivo de lo que estás pagando por cada unidad
+        de producto.
+      </p>
+      <p>
+        La app es gratuita, funciona sin internet una vez instalada y guarda tu historial de
+        comparaciones en el propio dispositivo, sin enviar datos a ningún servidor.
+      </p>
+    </section>
+
+    <!-- ============ APP REACT ============ -->
     <div id="root"></div>
+
+    <!-- ============ CONTENIDO EDITORIAL DETALLADO ============ -->
+    <section class="sc-wrap">
+      <h2>Cómo comparar precios por unidad de medida</h2>
+      <p>
+        Elegir un producto por su precio total puede llevarte a tomar una mala decisión.
+        Los empaques grandes suelen parecer más convenientes, pero al dividir el precio
+        entre la cantidad real de producto el resultado cambia por completo. Por eso en
+        Apreciando el cálculo se hace siempre sobre la <em>unidad de medida</em>: metro,
+        litro, kilo o unidad. Sin trucos de marketing: solo el cálculo objetivo de lo que
+        estás pagando por cada unidad de producto.
+      </p>
+
+      <div class="sc-box">
+        <p><strong>Ejemplo:</strong> Producto A de $100 con 4 rollos de 50 metros = $0.50 por metro.</p>
+        <p><strong>Ejemplo:</strong> Producto B de $70 con 4 rollos de 30 metros = $0.58 por metro.</p>
+        <p class="sc-win">El Producto A es el más barato: ahorrás $0.08 por metro (13.3%).</p>
+      </div>
+
+      <h3>Pasos para comparar dos productos</h3>
+      <ol>
+        <li>Selecciona la <strong>unidad de medida</strong> que usarás (metros, litros, kilos, gramos o unidades).</li>
+        <li>Ingresa el <strong>precio total</strong> del paquete de cada producto.</li>
+        <li>Indica <strong>cuántos ítems</strong> contiene cada paquete (rollos, botellas, cajas).</li>
+        <li>Escribe la <strong>medida de cada ítem</strong> (metros por rollo, litros por botella, kilos por bolsa).</li>
+        <li>Pulsa <strong>Comparar precios</strong> y Apreciando calcula el precio por unidad de cada opción.</li>
+      </ol>
+      <p>
+        La app destaca la mejor opción en verde, te muestra el costo exacto por unidad de
+        ambos productos y calcula el <strong>porcentaje de ahorro</strong> que obtienes al
+        elegirla. También puedes agregar un <strong>tercer producto</strong> para comparar
+        tres alternativas de una sola vez.
+      </p>
+
+      <h2>Ejemplos reales de ahorro</h2>
+      <p>
+        Estos son los casos que más se repiten en el supermercado y en la ferretería.
+        Compara las filas de la misma tabla para ver las diferencias:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio total</th>
+            <th>Precio por unidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Papel higiénico A</td>
+            <td>$100 / 4 rollos × 50 m</td>
+            <td class="sc-win">$0.50 / m</td>
+          </tr>
+          <tr>
+            <td>Papel higiénico B</td>
+            <td>$70 / 4 rollos × 30 m</td>
+            <td>$0.58 / m</td>
+          </tr>
+          <tr>
+            <td>Leche A</td>
+            <td>$45 / 1 L</td>
+            <td>$45.00 / L</td>
+          </tr>
+          <tr>
+            <td>Leche B</td>
+            <td>$120 / 3 L</td>
+            <td class="sc-win">$40.00 / L</td>
+          </tr>
+          <tr>
+            <td>Arroz A</td>
+            <td>$80 / 5 kg</td>
+            <td class="sc-win">$16.00 / kg</td>
+          </tr>
+          <tr>
+            <td>Arroz B</td>
+            <td>$50 / 3 kg</td>
+            <td>$16.67 / kg</td>
+          </tr>
+          <tr>
+            <td>Detergente A</td>
+            <td>$90 / 2 L</td>
+            <td>$45.00 / L</td>
+          </tr>
+          <tr>
+            <td>Detergente B</td>
+            <td>$150 / 4 L</td>
+            <td class="sc-win">$37.50 / L</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Preguntas frecuentes</h2>
+
+      <h3>¿Por qué no comparar simplemente el precio total?</h3>
+      <p>
+        Porque el precio total no refleja el valor real. Un paquete más grande puede costar
+        más dinero y aun así ser más barato por unidad. La comparación por unidad de medida
+        es la única forma objetiva de saber cuál oferta te conviene.
+      </p>
+
+      <h3>¿Qué pasa si un producto usa kilos y el otro gramos?</h3>
+      <p>
+        No hay problema. Apreciando convierte automáticamente las unidades compatibles
+        (kilos a gramos, por ejemplo) antes de comparar, de modo que el resultado siempre
+        refleja la misma base de medida.
+      </p>
+
+      <h3>¿Puedo comparar más de dos productos?</h3>
+      <p>
+        Sí. Con el botón <strong>Agregar tercer producto</strong> comparas tres alternativas
+        en una sola operación y la app te muestra cuál es la más barata de las tres.
+      </p>
+
+      <h3>¿Se guardan mis comparaciones?</h3>
+      <p>
+        Sí, la app guarda un historial local en tu dispositivo con las últimas
+        comparaciones realizadas. Puedes reutilizar cualquiera de ellas con un clic
+        o borrar el historial cuando quieras. Los datos nunca salen de tu navegador.
+      </p>
+
+      <h3>¿Funciona sin internet?</h3>
+      <p>
+        Sí. Apreciando es una PWA instalable: una vez que la agregás a tu pantalla de
+        inicio funciona incluso sin conexión a internet.
+      </p>
+
+      <h2>Por qué Apreciando</h2>
+      <ul>
+        <li>Comparación por <strong>unidad de medida real</strong>, no por precio de paquete.</li>
+        <li>Conversión automática entre <strong>kilos y gramos</strong> para comparar sin trampas.</li>
+        <li>Hasta <strong>tres productos</strong> comparados simultáneamente.</li>
+        <li><strong>Historial local</strong> para no perder tus comparaciones.</li>
+        <li><strong>Modo oscuro</strong> y diseño pensado para usar en el teléfono.</li>
+        <li>Instalable como <strong>app</strong> desde el navegador del móvil.</li>
+      </ul>
+
+      <div class="sc-ad">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-3801301989672398"
+             data-ad-slot="9134503925"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+
+      <h2>Más información</h2>
+      <p>
+        Si querés profundizar, tenemos una guía completa de uso, la historia del proyecto
+        y los datos de contacto.
+      </p>
+      <div class="sc-links">
+        <a href="/how-it-works.html">Cómo funciona</a>
+        <a href="/examples.html">Ejemplos de uso</a>
+        <a href="/about.html">Acerca de Apreciando</a>
+        <a href="/contact.html">Contacto</a>
+        <a href="/privacy.html">Política de privacidad</a>
+      </div>
+
+      <div class="sc-ad">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-3801301989672398"
+             data-ad-slot="3370866344"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+
+      <hr />
+      <p style="font-size:.75rem;color:#9ca3af;text-align:center;margin-top:1.5rem">
+        Creado por Abacus usando OpenCode
+      </p>
+    </section>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
