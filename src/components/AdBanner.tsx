@@ -11,17 +11,24 @@ const MONETAG_SRC = 'https://n6wxm.com/vignette.min.js'
 /**
  * Banner fijo de Monetag (Vignette).
  * No usa <ins> de AdSense; inserta el script de Monetag en el contenedor.
+ *
+ * Versión personal sin ads: ejecutá con VITE_DISABLE_ADS=1
+ *   PowerShell: $env:VITE_DISABLE_ADS="1"; npm run dev
+ *   En Vercel: Settings > Environment Variables > VITE_DISABLE_ADS=1
  */
 export default function AdBanner({ position }: AdBannerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const disabled = import.meta.env.VITE_DISABLE_ADS === '1'
 
   useEffect(() => {
-    if (!containerRef.current) return
+    if (disabled || !containerRef.current) return
     containerRef.current.innerHTML = ''
     const script = document.createElement('script')
     script.textContent = `(function(s){s.dataset.zone='${MONETAG_ZONE}',s.src='${MONETAG_SRC}'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
     containerRef.current.appendChild(script)
-  }, [position])
+  }, [position, disabled])
+
+  if (disabled) return null
 
   return (
     <div

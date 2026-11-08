@@ -3,8 +3,10 @@ import ProductCard from './components/ProductCard'
 import ComparisonResult from './components/ComparisonResult'
 import AdBanner from './components/AdBanner'
 import History from './components/History'
+import Favorites, { AddFavoriteForm } from './components/Favorites'
 import InstallPromptModal from './components/InstallPromptModal'
 import { useHistory, HistoryEntry } from './hooks/useHistory'
+import { useFavorites } from './hooks/useFavorites'
 import { useDarkMode } from './hooks/useDarkMode'
 import { useInstallPrompt } from './hooks/useInstallPrompt'
 import {
@@ -43,6 +45,8 @@ function App() {
   const [showInstallModal, setShowInstallModal] = useState(false)
 
   const { history, addEntry, clearHistory, removeEntry } = useHistory()
+  const { favorites, addFavorite, removeFavorite, clearFavorites } = useFavorites()
+  const [showAddFav, setShowAddFav] = useState(false)
   const { isDark, toggle: toggleDark } = useDarkMode()
   const { isInstallable, isInstalled, installApp } = useInstallPrompt()
 
@@ -249,8 +253,32 @@ function App() {
           <>
             <AdBanner position="middle" />
             <ComparisonResult result={result} />
+            {result.winnerIndex !== null && (
+              <>
+                <button
+                  onClick={() => setShowAddFav(true)}
+                  className="w-full border-2 border-savings-500 text-savings-700 dark:text-savings-300 font-medium py-3 px-6 rounded-xl hover:bg-savings-50 dark:hover:bg-savings-900/20 transition-colors"
+                >
+                  ⭐ Agregar ganador a favoritos
+                </button>
+                {showAddFav && (
+                  <AddFavoriteForm
+                    winnerIndex={result.winnerIndex}
+                    productInput={result.products[result.winnerIndex].input}
+                    pricePerUnit={result.products[result.winnerIndex].pricePerUnit}
+                    onAdd={(name, note) => {
+                      addFavorite(result.products[result.winnerIndex].input, result.products[result.winnerIndex].pricePerUnit, name, note)
+                    }}
+                    onClose={() => setShowAddFav(false)}
+                  />
+                )}
+              </>
+            )}
           </>
         )}
+
+        {/* Favoritos */}
+        <Favorites entries={favorites} onRemove={removeFavorite} onClear={clearFavorites} />
 
         {/* Historial */}
         <History
