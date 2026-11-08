@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ProductCard from './components/ProductCard'
 import ComparisonResult from './components/ComparisonResult'
+import AdBanner from './components/AdBanner'
 import History from './components/History'
 import InstallPromptModal from './components/InstallPromptModal'
 import { useHistory, HistoryEntry } from './hooks/useHistory'
@@ -175,7 +176,7 @@ function App() {
       </header>
 
       {/* Contenido principal */}
-      <main className="max-w-lg mx-auto px-4 py-6 space-y-5 pb-8">
+      <main className="max-w-lg mx-auto px-4 py-6 space-y-5 pb-28">
         {/* Selector global de unidad */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
           <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
@@ -244,7 +245,12 @@ function App() {
         </button>
 
         {/* Resultados */}
-        {result && <ComparisonResult result={result} />}
+        {result && (
+          <>
+            <AdBanner position="middle" />
+            <ComparisonResult result={result} />
+          </>
+        )}
 
         {/* Historial */}
         <History
@@ -254,27 +260,12 @@ function App() {
           onReuse={handleReuse}
         />
 
-        {/* Contenido informativo para el usuario y para indexación */}
-        <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
-          <h2 className="text-base font-bold text-gray-800 dark:text-gray-100 mb-2">
-            ¿Por qué comparar por unidad de medida?
-          </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            El precio final de un paquete no siempre refleja lo que realmente pagas.
-            Comparando el costo por metro, litro, kilo o unidad, descubres cuál
-            es la opción más económica de forma objetiva. Por ejemplo, un paquete
-            de papel higiénico de $100 con 4 rollos de 50 metros cuesta $0.50 por
-            metro, mientras que uno de $70 con 4 rollos de 30 metros cuesta $0.58
-            por metro. Con Apreciando descubres esto en segundos.
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
-            Para usarla, elige una unidad de medida, ingresa el precio total,
-            la cantidad de ítems y la medida de cada ítem de ambos productos,
-            luego presiona "Comparar precios". La aplicación calcula
-            automáticamente el precio por unidad y te muestra el porcentaje
-            de ahorro de la mejor opción.
-          </p>
-        </section>
+        {/* Info breve (detalle completo en el enlace de abajo) */}
+        <details className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
+          <summary className="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-200">¿Cómo comparar?</summary>
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-3">Elegí la unidad, ingresá precio, cantidad de ítems y medida por ítem para cada producto, luego presioná "Comparar precios". La app calcula el costo por unidad y el % de ahorro.</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">Ejemplo: A $100 / 4 rollos x 50 m = $0.50/m. B $70 / 4 x 30 m = $0.58/m. Gana A (13.3%).</p>
+        </details>
 
         {/* Footer */}
         <div className="text-center text-xs text-gray-400 dark:text-gray-500 pt-4 space-y-2">
@@ -290,6 +281,13 @@ function App() {
           </p>
         </div>
       </main>
+
+      {/* Banner inferior fijo (Monetag Vignette) */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 p-2">
+        <div className="max-w-lg mx-auto">
+          <AdBanner position="bottom" />
+        </div>
+      </div>
 
       {/* Modal de instalación */}
       <InstallPromptModal
